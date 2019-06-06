@@ -1,31 +1,76 @@
-<!-- <div *ngFor="let item of cartItems">
-  <p>{{ item.product }}</p> -->
+<main>
+  <nav>
+    <img class="logo" src="../assets/logo.png" alt="" />
+    <h1>Grand Circus Shop Inventory</h1>
+    <button class="addItem btn" (click)="toggleAddItem()">Add Item</button>
+  </nav>
+  <div
+    class="addNewItemForm"
+    [ngClass]="{
+      formOpen: addItemShowing,
+      'is-visuallyHidden': !addItemShowing,
+      'is-hidden': !addItemShowing
+    }"
+  >
+    <form
+      class="formContent"
+      *ngIf="addItemShowing"
+      #itemForm="ngForm"
+      (ngSubmit)="addItem(itemForm)"
+    >
+      <h3>Add A New Product</h3>
+      <div class="productForm">
+        <label for="">Product</label>
+        <input type="text" ngModel name="product" />
+      </div>
+      <div>
+        <label for="">Price</label>
+        <input type="number" ngModel name="price" />
+      </div>
+      <div>
+        <label for="">Quantity</label>
+        <input type="number" ngModel name="quantity" />
+      </div>
+      <button>Save</button>
+    </form>
+  </div>
+  <section [ngClass]="{ 'is-blurred': mainBlur }">
+    <div *ngFor="let item of cartItems; index as i" class="item_container">
+      <p class="product">{{ item.product }}</p>
+      <div class="itemMain">
+        <div class="image">
+          <img
+            class="productImage"
+            src="../assets/noImage.png"
+            alt="Item Image"
+          />
+        </div>
+        <div>
+          <p class="price">{{ item.price }}</p>
 
-  <main >
-    <h1>Shopping Cart</h1>
-    <section>
-    <div *ngFor="let item of cartItems" class="item_container">
-      <p>{{ item.product }}</p>
-      <p>{{ item.price | currency }} </p>
-      <p> {{ item.quantity }} </p>
-      <button (click)="deleteItem(item.id)">X</button>
-      <button (click)="showEditForm()">Edit</button>
+          <p class="quantity">
+            Quantity: {{ item.quantity }}
+            <button class="updateBtn" (click)="toggleForm(i)"><i class="material-icons">
+                edit
+                </i></button>
+          </p>
+          <button class="btn deleteBtn" (click)="deleteItem(item.id)">
+            <i class="material-icons">
+              delete_outline
+            </i>
+          </button>
+        </div>
+      </div>
+      <form
+        *ngIf="item.beingUpdated"
+        #updateForm="ngForm"
+        (ngSubmit)="[updateItem(item), toggleForm(i)]"
+      >
+        <label for="">Quantity</label>
+        <input type="number" [(ngModel)]="item.quantity" name="quantity" />
+        <button>Save</button>
+      </form>
     </div>
-    <div class="edit animated" 
-  [ngClass]="{'bounceInDown':formShowing, 'bounceOutUp': !formShowing}" 
-  *ngIf="formShowing">
-  <h4>Edit Item</h4>
-<form #editedItem="ngForm" (ngSubmit)="editItem(editedItem, index)">
-    <label for="">Id: </label>
-  <input type="text" name="id" placeholder="id" ngModel>
-  <label for="">Product: </label>
-  <input type="text" name="product" placeholder="Product" ngModel>
-  <label for="">Price: </label>
-  <input type="text" name="price" placeholder="Price" ngModel>
-  <label for="">Quantity: </label>
-  <input type="text" name="quantity" placeholder="Quantity" ngModel>
-  <button>Save</button>
-</form>
-</div>
+
   </section>
-  </main>
+</main>
